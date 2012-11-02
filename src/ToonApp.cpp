@@ -32,6 +32,7 @@ class ToonApp : public AppBasic {
 	gl::GlslProg silhouetteShader;
 	gl::GlslProg compositeShader;
 	gl::GlslProg passThruShader;
+	gl::GlslProg phongShader;
 
 	gl::Fbo normalBuffer;
 	gl::Fbo normalEdgeBuffer;
@@ -42,6 +43,7 @@ class ToonApp : public AppBasic {
 
 	float cabinetRotation;
 	bool viewAllPasses;
+	bool drawLitCabinet;
 };
 
 void ToonApp::setup()
@@ -62,6 +64,7 @@ void ToonApp::setup()
 		silhouetteShader = gl::GlslProg( loadAsset( "passThru_vert.glsl" ), loadAsset( "render_silhouette_frag.glsl" ) );
 		compositeShader = gl::GlslProg( loadAsset( "passThru_vert.glsl" ), loadAsset( "composite_frag.glsl" ) );
 		passThruShader = gl::GlslProg( loadAsset( "passThru_vert.glsl" ), loadAsset( "passThru_frag.glsl" ) );
+		phongShader = gl::GlslProg( loadAsset( "phong_vert.glsl" ), loadAsset( "phong_frag.glsl" ) );
 	}
 	catch( gl::GlslProgCompileExc &exc ) {
 		console() << "Shader compile error: " << std::endl;
@@ -85,6 +88,7 @@ void ToonApp::setup()
 
 	cabinetRotation = 0.0;
 	viewAllPasses = false;
+	drawLitCabinet = false;
 }
 
 void ToonApp::mouseDown( MouseEvent event )
@@ -94,6 +98,8 @@ void ToonApp::mouseDown( MouseEvent event )
 void ToonApp::keyDown( KeyEvent event ) {
 	if( event.getCode() == KeyEvent::KEY_v ){
         viewAllPasses = !viewAllPasses;
+	} else if( event.getCode() == KeyEvent::KEY_c ){
+		drawLitCabinet = !drawLitCabinet;
 	}
 }
 
@@ -104,8 +110,8 @@ void ToonApp::update()
 
 void ToonApp::draw()
 {
-	// Render depth info to a texture
-	depthBuffer.bindFramebuffer();
+		// Render depth info to a texture
+		depthBuffer.bindFramebuffer();
 		gl::enableDepthRead();
 		gl::enableDepthWrite();
 		gl::clear(Color::black(), true);
@@ -207,11 +213,12 @@ void ToonApp::draw()
 		silhouetteBuffer.unbindFramebuffer();
 	gl::popModelView();
 
-	// Now render the shaded model to a texture
+	// Now render the model to a texture
 	shadedModelBuffer.bindFramebuffer();
 		gl::enableDepthRead();
 		gl::enableDepthWrite();
 		gl::clear(Color(255.0, 136.0/255.0, 44.0/255.0), true);
+		phongShader.bind();
 
 		gl::pushMatrices();
 			gl::setMatrices(camera);
@@ -219,6 +226,7 @@ void ToonApp::draw()
 			gl::scale(100.0f, 100.0f, 100.0f);
 			gl::draw(arcadeCabinet);
 		gl::popMatrices();
+		phongShader.unbind();
 	shadedModelBuffer.unbindFramebuffer();
 
 	// Finally, composite the shaded texture with the combined edge

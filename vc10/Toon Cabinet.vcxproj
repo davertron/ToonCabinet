@@ -125,8 +125,9 @@
     <None Include="..\assets\normal_vert.glsl" />
     <None Include="..\assets\passThru_frag.glsl" />
     <None Include="..\assets\passThru_vert.glsl" />
+    <None Include="..\assets\phong_frag.glsl" />
+    <None Include="..\assets\phong_vert.glsl" />
     <None Include="..\assets\render_silhouette_frag.glsl" />
-    <None Include="..\assets\texture_vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

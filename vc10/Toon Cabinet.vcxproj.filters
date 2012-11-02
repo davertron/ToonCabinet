@@ -45,9 +45,6 @@
     <None Include="..\assets\depth_frag.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\assets\texture_vert.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\assets\depthEdge_frag.glsl">
       <Filter>Resource Files</Filter>
     </None>
@@ -70,6 +67,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\assets\passThru_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\phong_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\phong_vert.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
